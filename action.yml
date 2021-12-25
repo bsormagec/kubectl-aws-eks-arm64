@@ -1,4 +1,4 @@
-name: kubectl-apply
+name: kubectl-apply-docker
 description: "run kubectl in github action"
 author: 'roimor'
 runs:
