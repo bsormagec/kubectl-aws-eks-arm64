@@ -29,21 +29,29 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: deploy to cluster
-      uses: kodermax/kubectl-aws-eks@master
+      uses: roimor/kubectl-aws-eks@1.1
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: my-app
         IMAGE_TAG: ${{ github.sha }}
       with:
-        args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        args: kubectl set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        
+# or apply k8s manifests with envsubst:
+    - name: apply with envsubst 
+      uses: roimor/kubectl-aws-eks@1.1
+      env:
+        ENV_VAR: ${{ env.ENV_VAR }}
+      with:
+        args: envsubst < Deployment.yaml | kubectl apply -n app -f -
         
     - name: verify deployment
       uses: kodermax/kubectl-aws-eks@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
-        args: rollout status deployment/my-app
+        args: kubectl rollout status deployment/my-app
 ```
 
 ## Secrets
