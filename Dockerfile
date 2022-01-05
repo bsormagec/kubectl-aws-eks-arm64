@@ -7,6 +7,6 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
     mv ./kubectl /usr/bin/kubectl 
 
 RUN kubectl version --client
-chmod +x entrypoint.sh
 COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
