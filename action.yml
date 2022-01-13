@@ -1,6 +1,6 @@
 name: kubectl-apply-docker
 description: "run kubectl in github action"
-author: 'roimor'
+author: 'neosec'
 runs:
   using: 'docker'
   image: 'Dockerfile'
