@@ -1,3 +1,5 @@
+FROM alpine/helm as builder
+
 FROM amazon/aws-cli
 
 ENV BASE_URL="https://get.helm.sh"
@@ -10,14 +12,10 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
     mv ./kubectl /usr/bin/kubectl && \
     yum install -y gettext
 
-RUN curl -L ${BASE_URL}/${HELM_3_FILE} |tar xvz && \
-    mv linux-amd64/helm /usr/bin/helm3 && \
-    chmod +x /usr/bin/helm3 && \
-    rm -rf linux-amd64
-
 RUN kubectl version --client
 
 COPY entrypoint.sh /entrypoint.sh
+COPY --from=builder /usr/bin/helm /usr/bin/helm
 
 RUN chmod +x /entrypoint.sh
 
