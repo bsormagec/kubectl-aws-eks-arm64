@@ -22,29 +22,34 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
-    
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
+        aws-region: us-west-1
+   
     - name: deploy to cluster
-      uses: roimor/kubectl-aws-eks@1.1
+      uses: neosec-com/kubectl-aws-eks@1.1.2
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: my-registry
         ECR_REPOSITORY: my-app
         IMAGE_TAG: ${{ github.sha }}
       with:
         args: kubectl set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         
-# or apply k8s manifests with envsubst:
+# Or apply k8s manifests with envsubst:
     - name: apply with envsubst 
-      uses: roimor/kubectl-aws-eks@1.1
+      uses: neosec-com/kubectl-aws-eks@1.1.2
       env:
         ENV_VAR: ${{ env.ENV_VAR }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
       with:
         args: envsubst < Deployment.yaml | kubectl apply -n app -f -
+        
+# Install a helm release:
+    - name: Install release
+      uses: neosec-com/kubectl-aws-eks@1.1.3-helm
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
+      with:
+        args: helm install my-release charts/my-chart
         
     - name: verify deployment
       uses: kodermax/kubectl-aws-eks@master
