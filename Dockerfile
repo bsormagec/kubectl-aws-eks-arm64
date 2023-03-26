@@ -18,5 +18,6 @@ COPY entrypoint.sh /entrypoint.sh
 COPY --from=builder /usr/bin/helm /usr/bin/helm
 
 RUN chmod +x /entrypoint.sh
+RUN chmod 600 /tmp/config
 
 ENTRYPOINT ["/entrypoint.sh"]
