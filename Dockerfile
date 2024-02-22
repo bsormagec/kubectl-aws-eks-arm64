@@ -10,7 +10,7 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
     chmod +x /usr/local/bin/aws-iam-authenticator && \
     chmod +x ./kubectl && \
     mv ./kubectl /usr/bin/kubectl && \
-    yum install -y gettext
+    yum install -y gettext jq
 
 RUN kubectl version --client
 
@@ -18,6 +18,7 @@ COPY entrypoint.sh /entrypoint.sh
 COPY --from=builder /usr/bin/helm /usr/bin/helm
 
 RUN chmod +x /entrypoint.sh
+RUN touch /tmp/config
 RUN chmod 600 /tmp/config
 
 ENTRYPOINT ["/entrypoint.sh"]
