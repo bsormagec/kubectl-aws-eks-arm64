@@ -25,7 +25,7 @@ jobs:
         aws-region: us-west-1
    
     - name: deploy to cluster
-      uses: bsormagec/kubectl-aws-eks-arm64@1.0.1
+      uses: bsormagec/kubectl-aws-eks-arm64@1.0.2
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
         ECR_REGISTRY: my-registry
@@ -36,7 +36,7 @@ jobs:
         
 # Or apply k8s manifests with envsubst:
     - name: apply with envsubst 
-      uses: bsormagec/kubectl-aws-eks-arm64@1.0.1
+      uses: bsormagec/kubectl-aws-eks-arm64@1.0.2
       env:
         ENV_VAR: ${{ env.ENV_VAR }}
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
@@ -45,7 +45,7 @@ jobs:
         
 # Install a helm release:
     - name: Install release
-      uses: bsormagec/kubectl-aws-eks-arm64@1.0.1
+      uses: bsormagec/kubectl-aws-eks-arm64@1.0.2
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
       with:
