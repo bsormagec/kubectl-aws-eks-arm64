@@ -1,6 +1,6 @@
-name: kubectl-apply-action
+name: kubectl-apply-action-arm64
 description: "run kubectl in github action"
-author: 'neosec'
+author: 'bsormagec'
 runs:
   using: 'docker'
   image: 'Dockerfile'
